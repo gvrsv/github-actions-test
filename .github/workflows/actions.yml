@@ -8,10 +8,13 @@ jobs:
     steps:
       - name: Checkout action
         uses: actions/checkout@v3
-      - name: List files
+      - name: List files and env variables
         run: |
           pwd
           ls -a
+          echo $GITHUB_SHA
+          echo $GITHUB_ACTOR
+          echo $RUNNER_OS
       - name: Simple JS action
         id: greet
         uses: actions/hello-world-javascript-action@v1.1
