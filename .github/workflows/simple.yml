@@ -16,3 +16,11 @@ jobs:
         run: |
           Get-Date
         shell: pwsh
+  run-windows-commands:
+    runs-on: windows-latest
+    steps:
+      - name: Output current directory in PS
+        run: Get-Location
+      - name: Output current directory in Bash
+        run: pwd
+        shell: bash
