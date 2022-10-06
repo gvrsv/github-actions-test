@@ -7,8 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo a string
-        run: echco "Hello World"
+        run: echo "Hello World"
       - name: Multiline script
         run: |
           node -v
           npm -v
+      - name: Powershell core command
+        run: |
+          Get-Date
+        shell: pwsh
