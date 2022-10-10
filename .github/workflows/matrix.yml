@@ -4,6 +4,7 @@ on: pull_request
 jobs:
   size-label:
     # https://github.com/marketplace/actions/pull-request-size-labeler
+    # a little bit of comment added 
     name: Size label
     runs-on: ubuntu-latest
     continue-on-error: true
