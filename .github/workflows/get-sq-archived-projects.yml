@@ -26,7 +26,7 @@ jobs:
           GITHUB_ORGANIZATION: ${{ inputs.ghOrganization }}
           SONARQUBE_DOMAIN_NAME: ${{ inputs.sonarQubeDomainName }}
           SONARQUBE_TOKEN: ${{ inputs.sonarQubeToken }}
-        shell: powershell
+        shell: pwsh
         run: |
           & .\Scripts\Sonar-ArchivedGHRepos.ps1 `
             -ghOrganization $env:GH_ORGANIZATION `
