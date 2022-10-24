@@ -17,6 +17,10 @@ jobs:
   get-projects:
     runs-on: ubuntu-latest
     steps:
+      - name: Add mask
+      run: |
+        echo "::add-mask::${{ secrets.SECRET_URL }}" 
+
       - name: Checkout action
         uses: actions/checkout@v3
 
@@ -32,7 +36,7 @@ jobs:
         shell: pwsh
         run: |
           .\Scripts\Sonar-ArchivedGHRepos.ps1 `
-            -ghOrganization $env:GH_ORGANIZATION `
+            -ghOrganization $env:GITHUB_ORGANIZATION `
             -ghToken $env:GITHUB_TOKEN `
             -sonarQubeDomainName $env:SONARQUBE_DOMAIN_NAME`
             -sonarQubeToken $env:SONARQUBE_TOKEN
