@@ -1,6 +1,6 @@
 name: Shell Commands
 
-on: [pull_request]
+on: push
 
 jobs:
   run-shell-command:
@@ -14,7 +14,8 @@ jobs:
           npm -v
       - name: Powershell core command
         run: |
-          Get-Date
+          Get-ChildItem -Path . \
+            -Recurse
         shell: pwsh
   run-windows-commands:
     runs-on: windows-latest
