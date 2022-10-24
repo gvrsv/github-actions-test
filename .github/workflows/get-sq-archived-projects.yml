@@ -17,10 +17,6 @@ jobs:
   get-projects:
     runs-on: ubuntu-latest
     steps:
-      - name: Add mask
-      run: |
-        echo "::add-mask::${{ secrets.SECRET_URL }}" 
-
       - name: Checkout action
         uses: actions/checkout@v3
 
