@@ -20,6 +20,9 @@ jobs:
       - name: Checkout action
         uses: actions/checkout@v3
 
+      - name: LS
+        run: ls -a
+
       - name: Run PowerShell script
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,7 +31,7 @@ jobs:
           SONARQUBE_TOKEN: ${{ inputs.sonarQubeToken }}
         shell: pwsh
         run: |
-          & .\Scripts\Sonar-ArchivedGHRepos.ps1 `
+          .\Scripts\Sonar-ArchivedGHRepos.ps1 `
             -ghOrganization $env:GH_ORGANIZATION `
             -ghToken $env:GITHUB_TOKEN `
             -sonarQubeDomainName $env:SONARQUBE_DOMAIN_NAME`
