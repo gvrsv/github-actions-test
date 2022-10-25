@@ -19,9 +19,9 @@ jobs:
     steps:
       - name: Masking values
         run: |
-          echo "::add-mask::$ghOrganization"
-          echo "::add-mask::$sonarQubeDomainName"
-          echo "::add-mask::$sonarQubeToken"
+          echo "::add-mask::${{ inputs.ghOrganization }}"
+          echo "::add-mask::${{ inputs.sonarQubeDomainName }}"
+          echo "::add-mask::${{ inputs.sonarQubeToken }}"
 
       - name: Checkout action
         uses: actions/checkout@v3
