@@ -17,15 +17,18 @@ jobs:
   get-projects:
     runs-on: ubuntu-latest
     steps:
+      - name: Masking values
+        run: |
+          echo ""::add-mask::$ghOrganization"
+          echo ""::add-mask::$sonarQubeDomainName"
+          echo ""::add-mask::$sonarQubeToken"
+          
       - name: Checkout action
         uses: actions/checkout@v3
 
-      - name: LS
-        run: ls -a
-
       - name: Run PowerShell script
         env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GH_PAT }}
           GITHUB_ORGANIZATION: ${{ inputs.ghOrganization }}
           SONARQUBE_DOMAIN_NAME: ${{ inputs.sonarQubeDomainName }}
           SONARQUBE_TOKEN: ${{ inputs.sonarQubeToken }}
