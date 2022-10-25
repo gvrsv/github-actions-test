@@ -1,37 +1,20 @@
 name: Get archived SonarQube projects
 
-on: 
-  workflow_dispatch:
-    inputs:
-      ghOrganization:
-        required: true
-        type: string
-      sonarQubeDomainName:
-        required: true
-        type: string
-      sonarQubeToken:
-        required: true
-        type: string
+on: workflow_dispatch
 
 jobs:
   get-projects:
     runs-on: ubuntu-latest
     steps:
-      - name: Masking values
-        run: |
-          echo "::add-mask::${{ inputs.ghOrganization }}"
-          echo "::add-mask::${{ inputs.sonarQubeDomainName }}"
-          echo "::add-mask::${{ inputs.sonarQubeToken }}"
-
       - name: Checkout action
         uses: actions/checkout@v3
 
       - name: Run PowerShell script
         env: 
           GITHUB_TOKEN: ${{ secrets.MY_GH_PAT }}
-          GITHUB_ORGANIZATION: ${{ inputs.ghOrganization }}
-          SONARQUBE_DOMAIN_NAME: ${{ inputs.sonarQubeDomainName }}
-          SONARQUBE_TOKEN: ${{ inputs.sonarQubeToken }}
+          GITHUB_ORGANIZATION: "RoyalAholdDelhaize"
+          SONARQUBE_DOMAIN_NAME: "sonar.ah.nl"
+          SONARQUBE_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
           .\Scripts\Sonar-ArchivedGHRepos.ps1 `
