@@ -21,11 +21,15 @@ jobs:
           $archivedGitHubRepos = Get-ArchivedGHRepo -ghOrganization $env:GITHUB_ORGANIZATION -ghToken $env:GITHUB_TOKEN
           $archivedGitHubRepos | Out-File -FilePath .\archivedGHRepos.txt
 
+      - name: Content view
+        run: |
+          cat archivedGHRepos.txt
+
       - name: Content export 
         id: contents
-        run:
+        run: |
           contents=$( cat archivedGHRepos.txt )
-          echo "::set-output name=ghrepolist::$contents"
+          echo "ghrepolist=$contents" >> $GITHUB_OUTPUT
 
   get-content:
     runs-on: ubuntu-latest
