@@ -1,3 +1,4 @@
+<#
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory=$true)]
@@ -17,6 +18,7 @@ Param(
     [ValidateNotNullOrEmpty()]
     $sonarQubeToken
 )
+#>
 
 function Get-ArchivedGHRepo {
     [CmdletBinding()]
@@ -163,8 +165,10 @@ function Get-ArchivedSonarProjects {
     return $archivedSonarProjects
 }
 
+<#
 $archivedGitHubRepos = Get-ArchivedGHRepo -ghOrganization $ghOrganization -ghToken $ghToken
 $sonarQubeProjects = Get-SonarProjects -sonarDomainName $sonarQubeDomainName -sonarToken $sonarQubeToken
 $archivedSonarQubeProjects = Get-ArchivedSonarProjects -sonarProjects $sonarQubeProjects -archivedRepos $archivedGitHubRepos
 
 return $archivedSonarQubeProjects
+#>

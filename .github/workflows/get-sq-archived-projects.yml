@@ -9,7 +9,12 @@ jobs:
       - name: Checkout action
         uses: actions/checkout@v3
 
-      - name: Run PowerShell script
+      - name: Dot Soursing
+        run: . .\Scripts\Sonar-ArchivedGHRepos.ps1
+        shell: pwsh
+
+      - name: Get archived GitHub repositories
+        id: archivedghrepos
         env: 
           GITHUB_TOKEN: ${{ secrets.MY_GH_PAT }}
           GITHUB_ORGANIZATION: "RoyalAholdDelhaize"
@@ -17,8 +22,13 @@ jobs:
           SONARQUBE_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          .\Scripts\Sonar-ArchivedGHRepos.ps1 `
-            -ghOrganization $env:GITHUB_ORGANIZATION `
-            -ghToken $env:GITHUB_TOKEN `
-            -sonarQubeDomainName $env:SONARQUBE_DOMAIN_NAME`
-            -sonarQubeToken $env:SONARQUBE_TOKEN
+          . .\Scripts\Sonar-ArchivedGHRepos.ps1
+          $archivedGitHubRepos = Get-ArchivedGHRepo -ghOrganization $env:GITHUB_ORGANIZATION -ghToken $env:GITHUB_TOKEN
+          $archivedGitHubRepos | Out-File -FilePath .\archivedRepos.txt
+
+      - name: Print the result
+        shell: pwsh
+        run: |
+        Write-Output "List of repos:" 
+        Get-Content .\archivedRepos.txt
+
