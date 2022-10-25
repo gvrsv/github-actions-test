@@ -9,18 +9,13 @@ jobs:
       - name: Checkout action
         uses: actions/checkout@v3
 
-      - name: Dot Soursing
-        run: . .\Scripts\Sonar-ArchivedGHRepos.ps1
-        shell: pwsh
-
       - name: Get archived GitHub repositories
-        id: archivedghrepos
+        shell: pwsh
         env: 
           GITHUB_TOKEN: ${{ secrets.MY_GH_PAT }}
           GITHUB_ORGANIZATION: "RoyalAholdDelhaize"
           SONARQUBE_DOMAIN_NAME: "sonar.ah.nl"
           SONARQUBE_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: pwsh
         run: |
           . .\Scripts\Sonar-ArchivedGHRepos.ps1
           $archivedGitHubRepos = Get-ArchivedGHRepo -ghOrganization $env:GITHUB_ORGANIZATION -ghToken $env:GITHUB_TOKEN
@@ -31,4 +26,10 @@ jobs:
         run: |
           Write-Output "List of repos:" 
           Get-Content .\archivedRepos.txt
+
+      - name: Create artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: archivedRepos.txt
 
