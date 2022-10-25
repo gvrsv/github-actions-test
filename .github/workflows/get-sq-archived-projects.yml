@@ -29,6 +29,6 @@ jobs:
       - name: Print the result
         shell: pwsh
         run: |
-        Write-Output "List of repos:" 
-        Get-Content .\archivedRepos.txt
+          Write-Output "List of repos:" 
+          Get-Content .\archivedRepos.txt
 
