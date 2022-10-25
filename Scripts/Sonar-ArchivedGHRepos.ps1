@@ -97,6 +97,7 @@ function Get-SonarProjects {
         $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $sonarToken,$password)))
         [int]$pageSize = 500
         [int]$pageNumber = 1
+        $sonarDomainName = $sonarDomainName.Trim()
         $response = Invoke-RestMethod -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)} -Method GET -Uri "https://$sonarDomainName/api/components/search?qualifiers=TRK&p=$pageNumber&ps=$pageSize"
         [int]$totalPages = [math]::Ceiling(($response.paging.total) / $pageSize)
         $sonarProjects = @()
