@@ -3,13 +3,16 @@ name: Get archived SonarQube projects
 on: workflow_dispatch
 
 jobs:
-  get-projects:
+  get-gh-repos:
     runs-on: ubuntu-latest
+    outputs: 
+      ghrepolist: ${{ steps.contents.outputs.ghrepolist }}
     steps:
       - name: Checkout action
         uses: actions/checkout@v3
 
       - name: Get archived GitHub repositories
+        id: contents
         shell: pwsh
         env: 
           GITHUB_TOKEN: ${{ secrets.MY_GH_PAT }}
@@ -19,17 +22,17 @@ jobs:
         run: |
           . .\Scripts\Sonar-ArchivedGHRepos.ps1
           $archivedGitHubRepos = Get-ArchivedGHRepo -ghOrganization $env:GITHUB_ORGANIZATION -ghToken $env:GITHUB_TOKEN
-          $archivedGitHubRepos | Out-File -FilePath .\archivedRepos.txt
+          "ghrepolist=$archivedGitHubRepos" | Out-File -FilePath $GITHUB_OUTPUT -Append
+
+  get-content:
+    runs-on: ubuntu-latest
+    needs: get-gh-repos
+    steps:
+      - name: Checkout action
+        uses: actions/checkout@v3
 
       - name: Print the result
         shell: pwsh
         run: |
           Write-Output "List of repos:" 
-          Get-Content .\archivedRepos.txt
-
-      - name: Create artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact
-          path: archivedRepos.txt
-
+          ${{ needs.get-gh-repos.outputs.ghrepolist }}
