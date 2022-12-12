@@ -22,7 +22,7 @@ jobs:
         id: summary
         run: |
           MYVAR=$(conftest test OPA/groups.yaml -n group)
-          echo $MYVAR >> $GITHUB_OUTPUT
+          echo "$MYVAR" >> $GITHUB_OUTPUT
       - name: Manual echo
         run: |
           MYVAR="${{ steps.summary.outputs }}"
