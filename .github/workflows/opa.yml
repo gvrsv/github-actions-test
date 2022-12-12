@@ -1,0 +1,17 @@
+name: OPA Workflow
+
+on: pull_request
+
+jobs:
+  policy-check:
+    name: Policy check
+    runs-on: ubuntu-latest
+    container: openpolicyagent/conftest:v0.32.1
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Validate docker licenses
+        run: |
+          conftest test OPA/groups.yaml -n group -o github
