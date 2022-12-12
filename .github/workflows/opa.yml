@@ -46,8 +46,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
-            const output = `**Warning**:
-            ${{ steps.summary.outputs.summary }}`;
+            const output = `> **Warning**
+            > ${{ steps.summary.outputs.summary }}`;
             github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
