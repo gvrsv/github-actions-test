@@ -12,14 +12,31 @@ jobs:
   policy-check:
     name: Policy check
     runs-on: ubuntu-latest
+    container: openpolicyagent/conftest:v0.32.1
     steps:
       - name: Code checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - name: conftest
-        uses: YubicoLabs/action-conftest@v3
+      - name: Validate docker licenses
+        id: summary
+        run: |
+          conftest test OPA/groups.yaml -n group --no-color >> $GITHUB_OUTPUT 
+      - name: Manual echo
+        run: |
+          MYVAR="${{ steps.summary.outputs }}"
+          echo $MYVAR
+      - name: Write output for pull request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
         with:
-          files: OPA/groups.yaml
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
-          gh-comment-url: ${{ github.event.pull_request.comments_url }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |-
+            const output = `#### Commenting on a pull request:
+            [${{ steps.summary.outputs }}]`;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: output
+            })
