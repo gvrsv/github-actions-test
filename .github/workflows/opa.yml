@@ -18,6 +18,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+      - name: Install jq
+        run: sudo apt install -y jq
       - name: Validate docker licenses
         id: summary
         run: |
