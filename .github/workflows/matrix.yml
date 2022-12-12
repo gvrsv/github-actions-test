@@ -1,6 +1,6 @@
 name: Matrix
-on: pull_request
-
+#on: pull_request
+on: workflow_dispatch
 jobs:
   size-label:
     # https://github.com/marketplace/actions/pull-request-size-labeler
