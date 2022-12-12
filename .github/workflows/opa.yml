@@ -21,18 +21,7 @@ jobs:
       - name: Validate docker licenses
         id: summary
         run: |
-          echo "summary=$(conftest test OPA/groups.yaml -n group --no-color)" >> $GITHUB_OUTPUT
-      - name: Write output for pull request
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |-
-            const output = `#### Commenting on a pull request:
-            [${{ steps.summary.outputs.summary }}]`;
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: output
-            })
+          conftest test OPA/groups.yaml -n group --no-color
+      - name: Get summary
+        run: |
+          echo "${{ steps.summary.outputs.stdout }}\n${{ steps.summary.outputs.stderr }}"
