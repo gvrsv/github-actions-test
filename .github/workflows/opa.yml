@@ -2,6 +2,12 @@ name: OPA Workflow
 
 on: pull_request
 
+permissions:
+  contents: write
+  id-token: write
+  issues: write
+  pull-requests: write
+
 jobs:
   policy-check:
     name: Policy check
@@ -13,5 +19,24 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Validate docker licenses
+        id: summary
         run: |
-          conftest test OPA/groups.yaml -n group -o github
+          conftest test OPA/groups.yaml -n group >> $GITHUB_OUTPUT
+      - name: Manual echo
+        run: |
+          MYVAR="${{ steps.summary.outputs }}"
+          echo $MYVAR
+      - name: Write output for pull request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ steps.token.outputs.token }}
+          script: |-
+            const output = `#### Commenting on a pull request:
+            [${{ steps.summary.outputs }}]`;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: output
+            })
