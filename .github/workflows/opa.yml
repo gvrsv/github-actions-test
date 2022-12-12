@@ -38,7 +38,7 @@ jobs:
       - name: Get the line 
         id: summary
         run: |
-          echo "summary=$(cat summary.json | jq .[0].warnings[0].msg)" >> $GITHUB_OUTPUT
+          echo "summary=$(cat summary.json | jq .[0].warnings[0].msg | sed 's/"//g')" >> $GITHUB_OUTPUT
         
       - name: Write output for pull request
         uses: actions/github-script@v6
@@ -46,8 +46,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
-            const output = `#### Commenting on a pull request:
-            [${{ steps.summary.outputs.summary }}]`;
+            const output = `**Warning**:
+            ${{ steps.summary.outputs.summary }}`;
             github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
