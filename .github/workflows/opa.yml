@@ -19,7 +19,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Install jq
-        run: sudo apt install -y jq
+        run: apt install -y jq
       - name: Validate docker licenses
         id: summary
         run: |
