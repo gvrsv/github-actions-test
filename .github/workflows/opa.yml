@@ -19,7 +19,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Validate docker licenses
-        id: summary
         run: |
           conftest test OPA/groups.yaml -n group -o json > summary.json
       - uses: actions/upload-artifact@v3
@@ -27,3 +26,31 @@ jobs:
           name: summary
           path: summary.json
           if-no-files-found: error
+  
+  comment-on-pr:
+    needs: ["policy-check"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: summary
+
+      - name: Get the line 
+        id: summary
+        run: |
+          echo "summary=$(cat summary.json | jq .[0].warnings[0].msg)" >> $GITHUB_OUTPUT
+        
+      - name: Write output for pull request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |-
+            const output = `#### Commenting on a pull request:
+            [${{ steps.summary.outputs.summary }}]`;
+            github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: output
+            })
