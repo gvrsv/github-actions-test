@@ -21,7 +21,7 @@ jobs:
       - name: Validate docker licenses
         id: summary
         run: |
-          conftest test OPA/groups.yaml -n group --no-color >> $GITHUB_STEP_SUMMARY
+          conftest test OPA/groups.yaml -n group --no-color
       - name: Manual echo
         run: |
           MYVAR="${{ steps.summary.outputs }}"
