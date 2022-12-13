@@ -28,10 +28,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
             const data = require('./summary.json');
-            console.log(data);
-            const obj = JSON.parse(data);
+            msg = data[0].warnings[0].msg;
             const output = `> **Warning**
-            > ${console.log(obj.warnings[0].msg)}`;
+            > ${msg}`;
             github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
