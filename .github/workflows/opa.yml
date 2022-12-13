@@ -28,6 +28,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
             const data = require('./summary.json');
+            console.log(data);
             const obj = JSON.parse(data);
             const output = `> **Warning**
             > ${console.log(obj.warnings[0].msg)}`;
