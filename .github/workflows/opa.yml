@@ -27,10 +27,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
-            import summary from './summary.json' assert {type: 'json'};
-            const myobj = JSON.parse(myjson);
+            const data = require('./summary.json');
+            const obj = JSON.parse(data);
             const output = `> **Warning**
-            > ${console.log(myobj.warnings[0].msg)}`;
+            > ${console.log(obj.warnings[0].msg)}`;
             github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
