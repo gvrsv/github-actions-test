@@ -1,0 +1,5 @@
+::group::Testing 'OPA/groups.yaml' against 2 policies in namespace 'group'
+::warning file=OPA/groups.yaml::Please, be aware that 7 of the available 10 licenses have been used.
+success file=OPA/groups.yaml 1
+::endgroup::
+2 tests, 1 passed, 1 warning, 0 failures, 0 exceptions

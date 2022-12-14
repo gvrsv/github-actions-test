@@ -2,6 +2,12 @@ name: OPA Workflow
 
 on: pull_request
 
+permissions:
+  contents: write
+  id-token: write
+  issues: write
+  pull-requests: write
+
 jobs:
   policy-check:
     name: Policy check
@@ -13,5 +19,26 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Validate docker licenses
+        id: validate
         run: |
-          conftest test OPA/groups.yaml -n group -o github
+          conftest test OPA/groups.yaml -n group -o github | tee summary.txt
+          if grep -q warning summary.txt; then
+            echo "CONFTEST_WARNING=$(cat summary.txt | grep -E "^::warning" | cut -d: -f5)" >> $GITHUB_OUTPUT
+          fi
+          if grep -q error summary.txt; then
+            exit 1
+          fi
+      - name: Write output for pull request
+        uses: actions/github-script@v6
+        if: steps.validate.outputs.CONFTEST_WARNING != ''
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |-
+            const output = `> **Warning**
+            > ${{steps.validate.outputs.CONFTEST_WARNING}}`;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: output
+            })

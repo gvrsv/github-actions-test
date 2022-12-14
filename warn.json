@@ -1,0 +1,12 @@
+[
+	{
+		"filename": "OPA/groups.yaml",
+		"namespace": "group",
+		"successes": 1,
+		"warnings": [
+			{
+				"msg": "Please, be aware that 6 of the available 10 licenses have been used."
+			}
+		]
+	}
+]
