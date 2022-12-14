@@ -1,7 +1,7 @@
 package group
 
-docker_license_count := 10
-docker_license_warn := 7
+docker_license_count := 50
+docker_license_warn := 45
 seats_taken := count(input["docker-desktop-admin"]) + count(input["docker-desktop-user"])
 
 deny[msg] {
