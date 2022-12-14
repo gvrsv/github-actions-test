@@ -21,29 +21,21 @@ jobs:
       - name: Validate docker licenses
         id: validate
         run: |
-          conftest test OPA/groups.yaml -n group -o github
-          conftest test OPA/groups.yaml -n group -o json > summary.json
-          if grep -q warning summary.json; then
-            echo "warning=true" >> $GITHUB_OUTPUT
-          else
-            echo "warning=false" >> $GITHUB_OUTPUT
+          conftest test OPA/groups.yaml -n group -o github | tee summary.txt
+          if grep -q warning summary.txt; then
+            echo "CONFTEST_WARNING=$(cat summary.txt | grep -E "^::warning" | cut -d: -f5)" >> $GITHUB_OUTPUT
           fi
       - name: Write output for pull request
         uses: actions/github-script@v6
-        if: steps.validate.outputs.warning == 'true'
+        if: steps.validate.outputs.CONFTEST_WARNING != ''
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
-            const data = require('./summary.json');
-            msg = data[0].warnings[0].msg;
             const output = `> **Warning**
-            > ${msg}`;
+            > ${{steps.validate.outputs.CONFTEST_WARNING}}`;
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: output
             })
-
-# warning
-
