@@ -21,15 +21,16 @@ jobs:
       - name: Validate docker licenses
         id: validate
         run: |
+          conftest test OPA/groups.yaml -n group -o github
           conftest test OPA/groups.yaml -n group -o json > summary.json
           if grep -q warning summary.json; then
-            echo "warn=true" >> $GITHUB_OUTPUT
+            echo "warning=true" >> $GITHUB_OUTPUT
           else
-            echo "warn=false" >> $GITHUB_OUTPUT
+            echo "warning=false" >> $GITHUB_OUTPUT
           fi
       - name: Write output for pull request
         uses: actions/github-script@v6
-        if: steps.validate.outputs.warn == 'true'
+        if: steps.validate.outputs.warning == 'true'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |-
