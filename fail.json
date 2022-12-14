@@ -1,0 +1,12 @@
+[
+	{
+		"filename": "OPA/groups.yaml",
+		"namespace": "group",
+		"successes": 1,
+		"failures": [
+			{
+				"msg": "The number of members (8) exceeds the number of available licenses (5)."
+			}
+		]
+	}
+]
