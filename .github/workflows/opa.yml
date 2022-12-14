@@ -25,6 +25,9 @@ jobs:
           if grep -q warning summary.txt; then
             echo "CONFTEST_WARNING=$(cat summary.txt | grep -E "^::warning" | cut -d: -f5)" >> $GITHUB_OUTPUT
           fi
+          if grep -q error summary.txt; then
+            exit 1
+          fi
       - name: Write output for pull request
         uses: actions/github-script@v6
         if: steps.validate.outputs.CONFTEST_WARNING != ''
